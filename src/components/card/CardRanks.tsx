@@ -1,4 +1,6 @@
-import { rank, ranks } from "../../models/ICard";
+import { rank, ranks } from '../../models/ICard';
+import './card.css';
+
 
 export const CardRanks = (props: {ranks: ranks}) => {
     
@@ -7,7 +9,7 @@ export const CardRanks = (props: {ranks: ranks}) => {
     }
 
     return (
-        <div>
+        <div className={`ranks`}>
             {
                 props.ranks.map((r, i) => <div key={r.toString() + i}>{getRankDisplay(r)}</div>)
             }

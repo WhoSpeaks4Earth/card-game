@@ -3,12 +3,14 @@ import { ICard } from "./models/ICard";
 
 const sampleCard: ICard = {
   title: 'Tesla',
-  ranks: [7, 10, 4, 9]
+  ranks: [7, 6, 10, 3]
 }
 
 function App() {
   return (
-    <Card card={sampleCard} />
+    <>
+      <Card card={sampleCard} />
+    </>
   );
 }
 
