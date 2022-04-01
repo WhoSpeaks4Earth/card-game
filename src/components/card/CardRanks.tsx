@@ -10,9 +10,12 @@ export const CardRanks = (props: {ranks: ranks}) => {
 
     return (
         <div className={`ranks`}>
-            {
-                props.ranks.map((r, i) => <div key={r.toString() + i}>{getRankDisplay(r)}</div>)
-            }
+            <div>{getRankDisplay(props.ranks[0])}</div>
+            <div>
+                <div>{getRankDisplay(props.ranks[3])}</div>
+                <div>{getRankDisplay(props.ranks[1])}</div>
+            </div>
+            <div>{getRankDisplay(props.ranks[2])}</div>
         </div>
     )
 }
