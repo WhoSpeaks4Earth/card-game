@@ -10,7 +10,7 @@ export const Card = (props: {card: ICard}) => (
         </div>
         
         <div className='card-footer'>
-            <h6 className='card-title'>{props.card.title}</h6>
+            <div className='card-title'>{props.card.title}</div>
         </div>
     </div>
 )
