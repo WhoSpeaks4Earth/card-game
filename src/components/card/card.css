@@ -3,11 +3,11 @@
     border: 1px solid gray;
 }
 
-.player-ownership {
-    background-color: azure;
+.player-ownership .card {
+    background-color: aliceblue;
 }
 
-.opponent-ownership {
+.opponent-ownership .card {
     background-color: pink;
 }
 
