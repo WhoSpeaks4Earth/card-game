@@ -1,22 +1,11 @@
 import { useEffect, useState } from 'react';
 import { ICard } from '../../models/ICard'
+import { IGame } from '../../models/IGame';
 import { CardService } from '../../services/card.service';
 import { Card } from '../card/Card';
 import { CardPlaceholder } from '../card/CardPlaceholder';
 import { PlayableCard } from '../card/PlayableCard';
 import './gameTable.css';
-
-interface IBoardPlacement {
-    cell: number,
-    card: ICard
-}
-
-interface IGame {
-    playerHand: ICard[],
-    opponentHand: ICard[],
-    selectedCard: ICard | null,
-    boardPlacements: (IBoardPlacement | null)[]
-}
 
 
 export const GameTable = () => {
@@ -27,7 +16,8 @@ export const GameTable = () => {
         playerHand: [],
         opponentHand: [],
         selectedCard: null,
-        boardPlacements: [null, null, null]
+        boardPlacements: [null, null, null],
+        isPlayerTurn: true
     });
 
     useEffect(() => {
@@ -40,6 +30,11 @@ export const GameTable = () => {
         });
     }, []);
 
+    useEffect(() => {
+        if (!game.isPlayerTurn)
+            doOpponentPlay();
+    })
+
     const onCardSelected = (card: ICard) => {
         setGame({...game, selectedCard: card});
     }
@@ -49,19 +44,32 @@ export const GameTable = () => {
     }
 
     const placeCard = (cell: number) => {
-        console.log(`placing in ${cell.toString()}`)
-        if (game.selectedCard) {
+        if (game.selectedCard && game.boardPlacements[cell] === null) {
             const newPlacements = game.boardPlacements;
-            newPlacements[cell] = {cell, card: game.selectedCard};
+            newPlacements[cell] = {cell, card: game.selectedCard, isPlayerCard: true};
+            const newPlayerHand = cardService.removeCardFromSet(game.selectedCard, game.playerHand);
 
             setGame({
                 ...game,
                 selectedCard: null,
-                playerHand: game.playerHand.filter(c => c.title !== game.selectedCard?.title),
-                boardPlacements: newPlacements
+                playerHand: newPlayerHand,
+                boardPlacements: newPlacements,
+                isPlayerTurn: false
             })
         }
     }
+
+    const doOpponentPlay = () => {
+        const bestPlacement = cardService.determineBestPlacement(game.opponentHand);
+        const newOpponentHand = cardService.removeCardFromSet(bestPlacement.card, game.opponentHand);
+        setGame({
+            ...game,
+            opponentHand: newOpponentHand,
+            boardPlacements: cardService.getNewBoardPlacements(bestPlacement, game.boardPlacements),
+            isPlayerTurn: true
+        })
+    }
+
 
     return (
         <div className='game-table'>
@@ -76,11 +84,15 @@ export const GameTable = () => {
                 {
                     game.boardPlacements.map((p, i) => {
                         return <div key={i} className='grid-cell' onClick={() => placeCard(i)}>
-                            {p ? <Card card={p.card} /> : <CardPlaceholder />}
+                            {
+                                p ?
+                                <div className={p.isPlayerCard ? 'player-ownership' : 'opponent-ownership'}>
+                                    <Card card={p.card} />
+                                </div>
+                                : <CardPlaceholder />}
                         </div>
                     })
                 }
-                
             </div>
             <div className='side-panel'>
                 {

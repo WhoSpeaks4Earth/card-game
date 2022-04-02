@@ -6,9 +6,7 @@ import { CardRanks } from '../components/card/CardRanks';
 
 const sampleCard: ICard = {
     title: 'Tesla',
-    ranks: [8, 6, 7, 10],
-    isPlayerCard: true,
-    isSelected: false
+    ranks: [8, 6, 7, 10]
 }
 
 test('card renders a title', () => {
@@ -22,7 +20,6 @@ test('card ranks render', () => {
     const topRank = screen.getByText(sampleCard.ranks[0].toString());
     const rightRank = screen.getByText(sampleCard.ranks[1].toString());
     const bottomRank = screen.getByText(sampleCard.ranks[2].toString());
-    // const leftRank = screen.getByText(sampleCard.ranks[3].toString());
     expect(topRank).toBeInTheDocument();
     expect(rightRank).toBeInTheDocument();
     expect(bottomRank).toBeInTheDocument();
