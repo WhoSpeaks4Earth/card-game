@@ -5,7 +5,6 @@
 }
 
 .side-panel {
-    border: 1px dashed blue;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,14 +13,13 @@
 }
 
 .center-grid {
+    display: flex;
+    justify-content: center;
     width: 60%;
 }
-.center-grid > div {
-    border: 1px dashed gray;
-    width: 30%;
-    height: 30%;
-}
-
-.game-card-active {
-    border: 2px solid green;
+.center-grid > .grid-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }

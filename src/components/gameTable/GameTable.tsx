@@ -2,14 +2,20 @@ import { useEffect, useState } from 'react';
 import { ICard } from '../../models/ICard'
 import { CardService } from '../../services/card.service';
 import { Card } from '../card/Card';
+import { CardPlaceholder } from '../card/CardPlaceholder';
 import { PlayableCard } from '../card/PlayableCard';
 import './gameTable.css';
+
+interface IBoardPlacement {
+    cell: number,
+    card: ICard
+}
 
 interface IGame {
     playerHand: ICard[],
     opponentHand: ICard[],
     selectedCard: ICard | null,
-    boardPlacement: ICard | null
+    boardPlacements: (IBoardPlacement | null)[]
 }
 
 
@@ -21,7 +27,7 @@ export const GameTable = () => {
         playerHand: [],
         opponentHand: [],
         selectedCard: null,
-        boardPlacement: null
+        boardPlacements: [null, null, null]
     });
 
     useEffect(() => {
@@ -42,24 +48,39 @@ export const GameTable = () => {
         return game.selectedCard?.title === card.title;
     }
 
-    const placeCard = () => {
-        if (game.selectedCard)
-            setGame({...game, boardPlacement: game.selectedCard})
+    const placeCard = (cell: number) => {
+        console.log(`placing in ${cell.toString()}`)
+        if (game.selectedCard) {
+            const newPlacements = game.boardPlacements;
+            newPlacements[cell] = {cell, card: game.selectedCard};
+
+            setGame({
+                ...game,
+                selectedCard: null,
+                playerHand: game.playerHand.filter(c => c.title !== game.selectedCard?.title),
+                boardPlacements: newPlacements
+            })
+        }
     }
 
     return (
         <div className='game-table'>
             <div className='side-panel'>
                 {
-                    game.opponentHand.map((c: ICard) => {
-                        return <Card key={c.title} card={c} />
+                    game.opponentHand.map((card: ICard) => {
+                        return <Card key={card.title} card={card} />
                     })
                 }
             </div>
             <div className='center-grid'>
-                <div onClick={() => placeCard()}>
-                    {game.boardPlacement ? <Card card={game.boardPlacement} /> : 'available'}
-                </div>
+                {
+                    game.boardPlacements.map((p, i) => {
+                        return <div key={i} className='grid-cell' onClick={() => placeCard(i)}>
+                            {p ? <Card card={p.card} /> : <CardPlaceholder />}
+                        </div>
+                    })
+                }
+                
             </div>
             <div className='side-panel'>
                 {

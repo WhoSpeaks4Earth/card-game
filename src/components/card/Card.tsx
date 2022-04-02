@@ -5,6 +5,7 @@ import './card.css';
 
 export const Card = (props: {card: ICard}) => {
 
+
     const getCustomStyles = () => {
         const styles: string[] = [];
         if (props.card.isPlayerCard)
