@@ -6,7 +6,9 @@ import { CardRanks } from '../components/card/CardRanks';
 
 const sampleCard: ICard = {
     title: 'Tesla',
-    ranks: [8, 6, 7, 10]
+    ranks: [8, 6, 7, 10],
+    isPlayerCard: true,
+    isSelected: false
 }
 
 test('card renders a title', () => {

@@ -3,6 +3,21 @@
     border: 1px solid gray;
 }
 
+.player-ownership {
+    background-color: azure;
+}
+
+.opponent-ownership {
+    background-color: pink;
+}
+
+.playable > .card:hover, .selected > .card {
+    box-shadow: 6px 6px 2px 1px rgba(0, 0, 255, .2) !important;
+    position: relative;
+    bottom: 2px;
+    right: 2px;
+}
+
 
 .card {
     box-shadow: 2px 1px #ccc;

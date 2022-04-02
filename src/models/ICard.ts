@@ -4,5 +4,7 @@ export type ranks = [rank, rank, rank, rank];
 
 export interface ICard {
     title: string,
-    ranks: [rank, rank, rank, rank]
+    ranks: [rank, rank, rank, rank],
+    isPlayerCard: boolean,
+    isSelected: boolean
 }

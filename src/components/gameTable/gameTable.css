@@ -10,9 +10,18 @@
     flex-direction: column;
     align-items: center;
     display: flex;
-    width: 25%;
+    width: 20%;
 }
 
 .center-grid {
-    width: 50%;
+    width: 60%;
+}
+.center-grid > div {
+    border: 1px dashed gray;
+    width: 30%;
+    height: 30%;
+}
+
+.game-card-active {
+    border: 2px solid green;
 }
