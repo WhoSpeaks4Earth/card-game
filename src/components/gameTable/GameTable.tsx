@@ -8,7 +8,8 @@ import './gameTable.css';
 interface IGame {
     playerHand: ICard[],
     opponentHand: ICard[],
-    selectedCard: ICard | null
+    selectedCard: ICard | null,
+    boardPlacement: ICard | null
 }
 
 
@@ -19,12 +20,14 @@ export const GameTable = () => {
     const [game, setGame] = useState<IGame>({
         playerHand: [],
         opponentHand: [],
-        selectedCard: null
+        selectedCard: null,
+        boardPlacement: null
     });
 
     useEffect(() => {
         const playerCards = cardService.getCards()
         setGame({
+            ...game,
             playerHand: playerCards,
             opponentHand: cardService.getCards(),
             selectedCard: playerCards[0] ?? null
@@ -39,6 +42,11 @@ export const GameTable = () => {
         return game.selectedCard?.title === card.title;
     }
 
+    const placeCard = () => {
+        if (game.selectedCard)
+            setGame({...game, boardPlacement: game.selectedCard})
+    }
+
     return (
         <div className='game-table'>
             <div className='side-panel'>
@@ -49,7 +57,9 @@ export const GameTable = () => {
                 }
             </div>
             <div className='center-grid'>
-                <div></div>
+                <div onClick={() => placeCard()}>
+                    {game.boardPlacement ? <Card card={game.boardPlacement} /> : 'available'}
+                </div>
             </div>
             <div className='side-panel'>
                 {
