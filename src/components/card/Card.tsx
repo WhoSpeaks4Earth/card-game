@@ -6,7 +6,7 @@ import './card.css';
 export const Card = (props: {card: ICard}) => {
 
     return (
-        <div className='card'>
+        <div className='card-structure card'>
             <div className='card-header'>
                 <CardRanks ranks={props.card.ranks} />
             </div>

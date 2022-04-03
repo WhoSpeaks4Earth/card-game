@@ -1,5 +1,5 @@
 import { ICard } from "../models/ICard";
-import { IBoardPlacement } from "../models/IGame";
+
 
 
 const cards: any[] = [
@@ -32,22 +32,22 @@ const cards: any[] = [
 export class CardService {
 
     getCards(): ICard[] {
-        return cards.slice(0, 3);
+        return cards.slice(0, 4);
     }
 
-    removeCardFromSet(card: ICard, set: ICard[]): ICard[] {
-        return set.filter(c => c.title !== card.title);
-    }
+    // removeCardFromSet(card: ICard, set: ICard[]): ICard[] {
+    //     return set.filter(c => c.title !== card.title);
+    // }
 
-    determineBestPlacement(hand: ICard[]): IBoardPlacement {
-        return {cell: 0, card: hand[0], isPlayerCard: false}
-    }
+    // determineBestPlacement(hand: ICard[]): IBoardPlacement {
+    //     return {cell: 0, card: hand[0], isPlayerCard: false}
+    // }
 
-    getNewBoardPlacements(newPlacement: IBoardPlacement, currentBoard: (IBoardPlacement | null)[]): (IBoardPlacement | null)[] {
-        const placements: (IBoardPlacement | null)[] = currentBoard.map((p, i) => {
-            return newPlacement.cell === i ? {...newPlacement} : p;
-        })
-        return placements;
-    }
+    // getNewBoardPlacements(newPlacement: IBoardPlacement, currentBoard: (IBoardPlacement | null)[]): (IBoardPlacement | null)[] {
+    //     const placements: (IBoardPlacement | null)[] = currentBoard.map((p, i) => {
+    //         return newPlacement.cell === i ? {...newPlacement} : p;
+    //     })
+    //     return placements;
+    // }
 
 }
