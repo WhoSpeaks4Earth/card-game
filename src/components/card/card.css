@@ -12,8 +12,8 @@
     height: 100%;
     width: 100%;
     border-radius: 12px;
-    border: 1px solid #eee;
     background: transparent;
+    border: 1px solid gray;
 }
 
 .placeholder {
@@ -22,27 +22,21 @@
     cursor: pointer;
 }
 
-.card-structure {
+.card {
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 200px;
     width: 150px;
-    border-radius: 12px;
     font-size: 20px;
     font-family: fantasy;
 }
 
 .selectable:hover {
-    border: 2px solid red;
-}
-
-.ghost {
-    z-index: -1;
-}
-
-.active .card {
-    border: 2px solid blue;
+    border-radius: 12px;
+    cursor: pointer;
+    left: -20px;
 }
 
 

@@ -3,11 +3,11 @@ import { CardRanks } from './CardRanks';
 import './card.css';
 
 
-export const Card = (props: {card: (ICard | null), customStyle: any, customCss?: string}) => {
+export const Card = (props: {card: ICard, customStyle: any, customCss?: string}) => {
 
     return (
         <div
-            className={`card-structure card ${(props.customCss && props.card) ? props.customCss : ''}`}
+            className={`card  ${(props.customCss && props.card) ? props.customCss : ''}`}
             style={props.customStyle ? props.customStyle : null}>
                 {
                     props.card ?

@@ -4,7 +4,7 @@ import { Card } from "../card/Card"
 import './cardHand.css';
 
 
-export const CardHand = (props: {cards: (ICard | null)[], activeIndex: number, onCardClick?: any, isTurn: boolean}) => {
+export const CardHand = (props: {cards: ICard[], activeIndex: number, onCardClick?: any, isTurn: boolean}) => {
 
     const isPlayerHand: boolean = true; //props.cards[0]?.isPlayerCard;
 
@@ -39,8 +39,6 @@ export const CardHand = (props: {cards: (ICard | null)[], activeIndex: number, o
         let css = '';
         if (props.isTurn && isPlayerHand && props.onCardClick !== undefined && card)
             css = 'selectable ';
-        if (!card)
-            css += 'ghost'
         return css;
     }
 
@@ -53,7 +51,7 @@ export const CardHand = (props: {cards: (ICard | null)[], activeIndex: number, o
     return (
         <div className='card-hand'>
             {
-                props.cards.map((card: (ICard | null), index: number) => {
+                props.cards.map((card: ICard, index: number) => {
                     return (
                         <div key={`${card?.title}${index}`} onClick={() => onCardClick(index)}>
                             <Card card={card} customStyle={getCardStyle(index)} customCss={getCardCss(index)} />
