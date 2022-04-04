@@ -1,39 +1,52 @@
 import { useEffect, useState } from "react";
-import { IBoardCell } from "../../models/IBoard";
+import { IBoard, IBoardCell } from "../../models/IBoard";
 import { ICard } from "../../models/ICard";
-import { IGame } from "../../models/IGame";
+import { IGame, winner } from "../../models/IGame";
 import { BoardService } from "../../services/board.service";
 import { CardService } from "../../services/card.service";
+import { DealerService } from "../../services/dealer.service";
 import { Board } from "../board/Board";
 import { CardHand } from "../cardHand/CardHand";
 import { PlayerCardHand } from "../cardHand/PlayerCardHand";
 import './gameTable.css';
 
 
+
+const boardService = new BoardService();
+const dealerService = new DealerService();
+const cardService = new CardService();
+
 export const GameTable = () => {
-    const cardService = new CardService();
-    const boardService = new BoardService();
 
-    const [game, setGame] = useState<IGame>({
-        playerHand: {cards: [], activeIndex: 0},
-        opponentHand: {cards: [], activeIndex: 0},
-        board: boardService.createBoard(2, 2),
-        isPlayerTurn: true
-    });
+    const getInitialState = () => {
+        const board: IBoard = boardService.createBoard(2, 2);
+        const cardsPerHand = boardService.getCardsPerHand(board);
+        return {
+            playerHand: {cards: dealerService.getPlayerCards(cardsPerHand), activeIndex: 0},
+            opponentHand: {cards: dealerService.getOpponentCards(cardsPerHand), activeIndex: 0},
+            board,
+            isPlayerTurn: (Math.floor(Math.random() * 100) % 2 === 0),
+            winner: null
+        }
+    }
 
-    useEffect(() => {
-        const playerCards = cardService.getPlayerCards()
-        setGame({
-            ...game,
-            playerHand: {cards: playerCards, activeIndex: 0},
-            opponentHand: {cards: cardService.getOpponentCards(), activeIndex: 0},
-        });
-    }, []);
+    const [game, setGame] = useState<IGame>(getInitialState());
 
     useEffect(() => {
-        if (!game.isPlayerTurn)
+        const isBoardFull = boardService.isBoardFull(game.board);
+
+        if (isBoardFull && !game.winner)
+            determineWinner();
+        else if (!game.isPlayerTurn && !game.winner)
             playOpponentCard();
     })
+
+    
+
+    const playNewGame = () => {
+        setGame(getInitialState());
+    }
+
 
     const playPlayerCard = (placement: IBoardCell) => {
         const newPlayerHand = cardService.removeCardFromSet(placement.card as ICard, game.playerHand.cards);
@@ -41,7 +54,7 @@ export const GameTable = () => {
         setGame({
             ...game,
             playerHand: {cards: newPlayerHand, activeIndex: 0},
-            board: boardService.createBoardFromPlacement(game.board, placement),
+            board: boardService.getNewBoardFromPlacement(placement, game.board),
             isPlayerTurn: false
         })
     }
@@ -53,8 +66,16 @@ export const GameTable = () => {
         setGame({
             ...game,
             opponentHand: {cards: newOpponentHand, activeIndex: 0},
-            board: boardService.createBoardFromPlacement(game.board, bestPlacement),
+            board: boardService.getNewBoardFromPlacement(bestPlacement, game.board),
             isPlayerTurn: true
+        })
+    }
+
+    const determineWinner = () => {
+        let winner: winner = dealerService.determineWinner(game.board);
+        setGame({
+            ...game,
+            winner
         })
     }
 
@@ -82,6 +103,14 @@ export const GameTable = () => {
             </div>
             <div className='table-board'>
                 <Board board={game.board} onCellSelected={(pos: [number, number]) => onBoardCellSelected(pos)} />
+                { game.winner ?
+                    (
+                        <>
+                            <div>{`Winner: ${game.winner}`}</div>
+                            <button onClick={playNewGame}>Play Again?</button>
+                        </>
+                    )
+                : null }
             </div>
             <div className='side-panel'>
                 <PlayerCardHand {...game.playerHand} onCardClick={(index: number) => onPlayerCardClick(index)} />
