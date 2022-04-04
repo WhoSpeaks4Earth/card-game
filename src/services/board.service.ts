@@ -18,7 +18,6 @@ export class BoardService {
     }
 
     public getNewBoardFromPlacement(placement: IBoardCell, currentBoard: IBoard): IBoard {
-        // debugger;
         const [x, y] = placement.cell;
         const newBoard = currentBoard;
         newBoard.cells[y][x].card = placement.card;

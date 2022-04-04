@@ -19,38 +19,49 @@ const cardService = new CardService();
 export const GameTable = () => {
 
     const getInitialState = () => {
-        const board: IBoard = boardService.createBoard(2, 2);
+        const board = boardService.createBoard(2, 2);
         const cardsPerHand = boardService.getCardsPerHand(board);
+
         return {
             playerHand: {cards: dealerService.getPlayerCards(cardsPerHand), activeIndex: 0},
             opponentHand: {cards: dealerService.getOpponentCards(cardsPerHand), activeIndex: 0},
             board,
-            isPlayerTurn: (Math.floor(Math.random() * 100) % 2 === 0),
+            isPlayerTurn: true, //(Math.floor(Math.random() * 100) % 2 === 0),
             winner: null
         }
     }
 
-    const [game, setGame] = useState<IGame>(getInitialState());
+    const [game, setGame] = useState<IGame>(() => {
+        console.log('setting initial state')
+        return getInitialState();
+    });
 
     useEffect(() => {
         const isBoardFull = boardService.isBoardFull(game.board);
+        console.log('every effect');
 
-        if (isBoardFull && !game.winner)
-            determineWinner();
-        else if (!game.isPlayerTurn && !game.winner)
+        if (isBoardFull && !game.winner) {
+            let winner: winner = dealerService.determineWinner(game.board);
+            setGame({
+                ...game,
+                winner
+            })
+        }
+        else 
+        if (!game.isPlayerTurn && !game.winner) {
+            console.log('playing opponent. it is player turn? ' + game.isPlayerTurn)
             playOpponentCard();
+        }
     })
 
-    
 
     const playNewGame = () => {
         setGame(getInitialState());
     }
 
-
     const playPlayerCard = (placement: IBoardCell) => {
         const newPlayerHand = cardService.removeCardFromSet(placement.card as ICard, game.playerHand.cards);
-
+        
         setGame({
             ...game,
             playerHand: {cards: newPlayerHand, activeIndex: 0},
@@ -64,19 +75,11 @@ export const GameTable = () => {
         const newOpponentHand = cardService.removeCardFromSet(bestPlacement.card as ICard, game.opponentHand.cards);
 
         setGame({
-            ...game,
-            opponentHand: {cards: newOpponentHand, activeIndex: 0},
-            board: boardService.getNewBoardFromPlacement(bestPlacement, game.board),
-            isPlayerTurn: true
-        })
-    }
-
-    const determineWinner = () => {
-        let winner: winner = dealerService.determineWinner(game.board);
-        setGame({
-            ...game,
-            winner
-        })
+                ...game,
+                opponentHand: {cards: newOpponentHand, activeIndex: 0},
+                board: boardService.getNewBoardFromPlacement(bestPlacement, game.board),
+                isPlayerTurn: true
+            })
     }
 
 
