@@ -64,7 +64,7 @@ export const GameTable = () => {
         
         setGame({
             ...game,
-            playerHand: {cards: newPlayerHand, activeIndex: 0},
+            playerHand: {cards: newPlayerHand, activeIndex: 0}, // TODO: set to first non-empty index, if none - return 0
             board: boardService.getNewBoardFromPlacement(placement, game.board),
             isPlayerTurn: false
         })
@@ -85,8 +85,8 @@ export const GameTable = () => {
 
     const onBoardCellSelected = (pos: [number, number]) => {
         const [x, y] = pos;
-        if (game.isPlayerTurn && !game.board.cells[y][x].card) {
-            playPlayerCard({cell: pos, card: {...game.playerHand.cards[game.playerHand.activeIndex], isPlayerCard: true}});
+        if (game.isPlayerTurn && !game.board.cells[y][x].card && game.playerHand.cards[game.playerHand.activeIndex]) {
+            playPlayerCard({cell: pos, card: {...game.playerHand.cards[game.playerHand.activeIndex], isPlayerCard: true} as ICard});
         }
     }
 

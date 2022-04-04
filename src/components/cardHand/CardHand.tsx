@@ -4,15 +4,15 @@ import { Card } from "../card/Card"
 import './cardHand.css';
 
 
-export const CardHand = (props: {cards: ICard[], activeIndex: number, onCardClick?: any, isTurn: boolean}) => {
+export const CardHand = (props: {cards: (ICard | null)[], activeIndex: number, onCardClick?: any, isTurn: boolean}) => {
 
-    const isPlayerHand: boolean = props.cards[0]?.isPlayerCard;
+    const isPlayerHand: boolean = true; //props.cards[0]?.isPlayerCard;
 
     const getCardStyle = (index: number): any => {
         const stackStyle: any = getStackStyle(index);
         let style = stackStyle;
 
-        if (props.isTurn && props.activeIndex === index)
+        if (props.isTurn && props.activeIndex === index && props.cards[index])
             style = {...style, ...getActiveStyle()};
 
         return style;
@@ -34,8 +34,18 @@ export const CardHand = (props: {cards: ICard[], activeIndex: number, onCardClic
         return style;
     }
 
+    const getCardCss = (index: number) => {
+        const card = props.cards[index];
+        let css = '';
+        if (props.isTurn && isPlayerHand && props.onCardClick !== undefined && card)
+            css = 'selectable ';
+        if (!card)
+            css += 'ghost'
+        return css;
+    }
+
     const onCardClick = (index: number) => {
-        if (props.onCardClick !== undefined && props.activeIndex !== index) {
+        if (props.onCardClick !== undefined && props.activeIndex !== index && props.cards[index]) {
             props.onCardClick(index);
         }
     }
@@ -43,12 +53,12 @@ export const CardHand = (props: {cards: ICard[], activeIndex: number, onCardClic
     return (
         <div className='card-hand'>
             {
-                props.cards.map((card: ICard, index: number) => {
+                props.cards.map((card: (ICard | null), index: number) => {
                     return (
-                        <div key={`${card.title}${index}`} onClick={() => onCardClick(index)}>
-                            <Card card={card} customStyle={getCardStyle(index)} />
+                        <div key={`${card?.title}${index}`} onClick={() => onCardClick(index)}>
+                            <Card card={card} customStyle={getCardStyle(index)} customCss={getCardCss(index)} />
                         </div>
-                    )
+                        )
                 })
             }
         </div>

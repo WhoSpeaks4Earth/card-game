@@ -4,11 +4,15 @@ import { ICard } from "../models/ICard";
 
 export class CardService {
 
-    removeCardFromSet(card: ICard, set: ICard[]): ICard[] {
-        return set.filter(c => c.title !== card.title);
+    removeCardFromSet(card: (ICard | null), set: (ICard | null)[]): (ICard | null)[] {
+        return set.map(c => {
+            if (c?.title === card?.title)
+                return null;
+            return c;
+        });
     }
 
-    determineBestPlacement(board: IBoard, hand: ICard[]): IBoardCell {
+    determineBestPlacement(board: IBoard, hand: (ICard | null)[]): IBoardCell {
         let firstEmptyCell: [number, number] | null = null;
 
         for (let y = 0; y < board.cells.length; y++) {
