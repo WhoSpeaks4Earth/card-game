@@ -3,7 +3,7 @@ import { ActiveStatus } from "../card/ActiveStatus"
 import { Card } from "../card/Card"
 
 
-export const CardHand = (props: {cards: ICard[], activeIndex: number}) => {
+export const PlayerCardHand = (props: {cards: ICard[], activeIndex: number, onCardClick: any}) => {
 
     return (
         <>
@@ -11,7 +11,9 @@ export const CardHand = (props: {cards: ICard[], activeIndex: number}) => {
                 props.cards.map((card: ICard, index: number) => {
                     return (
                         <ActiveStatus key={index} active={props.activeIndex === index}>
-                            <Card card={card} />
+                            <div onClick={() => props.onCardClick(index)}>
+                                <Card card={card} />
+                            </div>
                         </ActiveStatus>
                     )
                 })

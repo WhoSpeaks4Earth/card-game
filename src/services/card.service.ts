@@ -1,3 +1,6 @@
+import { Console } from "console";
+import { title } from "process";
+import { IBoard, IBoardCell } from "../models/IBoard";
 import { ICard } from "../models/ICard";
 
 
@@ -31,23 +34,58 @@ const cards: any[] = [
 
 export class CardService {
 
-    getCards(): ICard[] {
+    getOpponentCards(): ICard[] {
         return cards.slice(0, 4);
     }
 
-    // removeCardFromSet(card: ICard, set: ICard[]): ICard[] {
-    //     return set.filter(c => c.title !== card.title);
-    // }
+    getPlayerCards(): ICard[] {
+        return cards.slice(0, 4).map((c: ICard) => {
+            return {...c, isPlayerCard: true}
+        });
+    }
 
-    // determineBestPlacement(hand: ICard[]): IBoardPlacement {
-    //     return {cell: 0, card: hand[0], isPlayerCard: false}
-    // }
+    removeCardFromSet(card: ICard, set: ICard[]): ICard[] {
+        return set.filter(c => c.title !== card.title);
+    }
 
-    // getNewBoardPlacements(newPlacement: IBoardPlacement, currentBoard: (IBoardPlacement | null)[]): (IBoardPlacement | null)[] {
-    //     const placements: (IBoardPlacement | null)[] = currentBoard.map((p, i) => {
-    //         return newPlacement.cell === i ? {...newPlacement} : p;
-    //     })
-    //     return placements;
-    // }
+    determineBestPlacement(board: IBoard, hand: ICard[]): IBoardCell {
+        let firstEmptyCell: [number, number] | null = null;
+
+        for (let y = 0; y < board.cells.length; y++) {
+            for (let x = 0; x < board.cells[y].length; x++) {
+                if (!board.cells[y][x].card) {
+                    firstEmptyCell = [x, y];
+                    break;
+                }
+            }
+            if (firstEmptyCell)
+                break;
+        }
+
+
+        return {cell: firstEmptyCell as [number, number], card: hand[0]}
+    }
+
+
+    determineWinner(board: IBoard): 'player' | 'opponent' | 'draw' {
+        let playerCount = 0;
+        let opponentCount = 0;
+
+        for (let i = 0; i < board.cells.length; i++) {
+            for (let j = 0; j < board.cells[i].length; j++) {
+                if (board.cells[i][j].card?.isPlayerCard)
+                    playerCount++;
+                else
+                    opponentCount++;
+            }
+        }
+
+        if (playerCount > opponentCount)
+            return 'player';
+        else if (opponentCount > playerCount)
+            return 'opponent'
+        else
+            return 'draw'
+    }
 
 }

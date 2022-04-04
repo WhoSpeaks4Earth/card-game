@@ -1,5 +1,4 @@
 import { ICard } from "../../models/ICard"
-import { ActiveStatus } from "../card/ActiveStatus"
 import { Card } from "../card/Card"
 
 
@@ -10,9 +9,9 @@ export const CardHand = (props: {cards: ICard[], activeIndex: number}) => {
             {
                 props.cards.map((card: ICard, index: number) => {
                     return (
-                        <ActiveStatus key={index} active={props.activeIndex === index}>
+                        <div key={card.title} className={props.activeIndex === index ? 'active' : ''}>
                             <Card card={card} />
-                        </ActiveStatus>
+                        </div>
                     )
                 })
             }

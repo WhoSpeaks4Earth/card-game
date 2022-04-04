@@ -4,7 +4,7 @@ import { CardPlaceholder } from "../card/CardPlaceholder";
 import './board.css';
 
 
-export const Board = (props: {board: IBoard}) => {
+export const Board = (props: {board: IBoard, onCellSelected: any}) => {
 
     return (
         <div className='board'>
@@ -14,7 +14,11 @@ export const Board = (props: {board: IBoard}) => {
                         {
                             row.map((cell, xIndex) => {
                                 return <div key={`${xIndex} ${yIndex}`} className='cell'>
-                                    {cell.card ? <Card card={cell.card} /> : <CardPlaceholder />}
+                                    {
+                                        cell.card ?
+                                        <Card card={cell.card} /> :
+                                        <div onClick={() => props.onCellSelected([xIndex, yIndex])}><CardPlaceholder /></div>
+                                    }
                                 </div> 
                             })
                         }

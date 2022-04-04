@@ -7,7 +7,6 @@ export interface IBoard {
 }
 
 export interface IBoardCell {
-    xPos: number,
-    yPos: number,
+    cell: [number, number],
     card: ICard | null
 }
