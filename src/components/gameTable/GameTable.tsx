@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IBoard, IBoardCell } from "../../models/IBoard";
+import { IBoardCell } from "../../models/IBoard";
 import { ICard } from "../../models/ICard";
 import { IGame, winner } from "../../models/IGame";
 import { BoardService } from "../../services/board.service";
@@ -7,7 +7,7 @@ import { CardService } from "../../services/card.service";
 import { DealerService } from "../../services/dealer.service";
 import { Board } from "../board/Board";
 import { CardHand } from "../cardHand/CardHand";
-import { PlayerCardHand } from "../cardHand/PlayerCardHand";
+import { StatusBar } from "../statusBar/StatusBar";
 import './gameTable.css';
 
 
@@ -83,7 +83,6 @@ export const GameTable = () => {
     }
 
 
-
     const onBoardCellSelected = (pos: [number, number]) => {
         const [x, y] = pos;
         if (game.isPlayerTurn && !game.board.cells[y][x].card) {
@@ -102,21 +101,14 @@ export const GameTable = () => {
     return (
         <div className='game-table'>
             <div className='side-panel'>
-                <CardHand {...game.opponentHand} />
+                <CardHand {...game.opponentHand} isTurn={!game.isPlayerTurn} />
             </div>
             <div className='table-board'>
                 <Board board={game.board} onCellSelected={(pos: [number, number]) => onBoardCellSelected(pos)} />
-                { game.winner ?
-                    (
-                        <>
-                            <div>{`Winner: ${game.winner}`}</div>
-                            <button onClick={playNewGame}>Play Again?</button>
-                        </>
-                    )
-                : null }
+                <StatusBar winner={game.winner} onPlayAgain={playNewGame} />
             </div>
             <div className='side-panel'>
-                <PlayerCardHand {...game.playerHand} onCardClick={(index: number) => onPlayerCardClick(index)} />
+                <CardHand {...game.playerHand} isTurn={game.isPlayerTurn} onCardClick={onPlayerCardClick} />
             </div>
         </div>
     )

@@ -16,7 +16,7 @@ export const Board = (props: {board: IBoard, onCellSelected: any}) => {
                                 return <div key={`${xIndex} ${yIndex}`} className='cell'>
                                     {
                                         cell.card ?
-                                        <Card card={cell.card} /> :
+                                        <Card card={cell.card} customStyle={null} /> :
                                         <div onClick={() => props.onCellSelected([xIndex, yIndex])}><CardPlaceholder /></div>
                                     }
                                 </div> 

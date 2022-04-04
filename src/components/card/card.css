@@ -25,6 +25,8 @@
     font-family: fantasy;
 }
 
+
+
 .active .card {
     border: 2px solid blue;
 }

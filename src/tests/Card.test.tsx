@@ -11,7 +11,7 @@ const sampleCard: ICard = {
 }
 
 test('card renders a title', () => {
-  render(<Card card={sampleCard} />);
+  render(<Card card={sampleCard} customStyle={null} />);
   const linkElement = screen.getByText(sampleCard.title);
   expect(linkElement).toBeInTheDocument();
 });
