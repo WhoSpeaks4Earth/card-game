@@ -18,7 +18,7 @@ const cardService = new CardService();
 
 export const GameTable = () => {
 
-    const getInitialState = () => {
+    const getInitialState = (): IGame => {
         const board = boardService.createBoard(2, 2);
         const cardsPerHand = boardService.getCardsPerHand(board);
 
@@ -38,17 +38,16 @@ export const GameTable = () => {
 
     useEffect(() => {
         const isBoardFull = boardService.isBoardFull(game.board);
-        console.log('every effect');
+        console.log('every effect.');
+
+        // if (game.flips)
+        //     applyFlips();
 
         if (isBoardFull && !game.winner) {
-            let winner: winner = dealerService.determineWinner(game.board);
-            setGame({
-                ...game,
-                winner
-            })
+            const winner: winner = dealerService.determineWinner(game.board);
+            setWinner(winner);
         }
-        else 
-        if (!game.isPlayerTurn && !game.winner) {
+        else if (!game.isPlayerTurn && !game.winner) {
             console.log('playing opponent. it is player turn? ' + game.isPlayerTurn)
             playOpponentCard();
         }
@@ -58,6 +57,33 @@ export const GameTable = () => {
     const playNewGame = () => {
         setGame(getInitialState());
     }
+
+    const setWinner = (winner: winner) => {
+        setGame({...game, winner});
+    }
+
+    // const shouldFlip = (pos: [number, number]) => {
+    //     if (game.flips)
+    //         return game.flips.findIndex(f => f[0] === pos[0] && f[1] === pos[1]) > -1;
+    //     return false;
+    // }
+
+    // const applyFlips = () => {
+    //     console.log('applying flips', game.flips)
+    //     const newBoardCells: IBoardCell[][] = game.board.cells.map((row: IBoardCell[], yIndex: number) => {
+    //         return row.map((c: IBoardCell, xIndex: number) => {
+    //             if (shouldFlip(c.cell) && c.card)
+    //                 return {...c, card: {...c.card, isPlayerCard: !c.card.isPlayerCard}};
+    //             return c;
+    //         });
+    //     })
+
+    //     setGame({
+    //         ...game,
+    //         board: {...game.board, cells: newBoardCells},
+    //         flips: null
+    //     })
+    // }
 
     const playPlayerCard = (placement: IBoardCell) => {
         const newPlayerHand = cardService.removeCardFromSet(placement.card as ICard, game.playerHand.cards);
@@ -71,7 +97,7 @@ export const GameTable = () => {
     }
 
     const playOpponentCard = () => {
-        const bestPlacement = cardService.determineBestPlacement(game.board, game.opponentHand.cards);
+        const bestPlacement = boardService.determineBestPlacement(game.board, game.opponentHand.cards);
         const newOpponentHand = cardService.removeCardFromSet(bestPlacement.card as ICard, game.opponentHand.cards);
 
         console.log('opponent changing the board')
