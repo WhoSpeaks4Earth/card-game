@@ -6,19 +6,9 @@ import './cardHand.css';
 
 export const CardHand = (props: {cards: ICard[], activeIndex: number, onCardClick?: any, isTurn: boolean}) => {
 
-    const isPlayerHand: boolean = true; //props.cards[0]?.isPlayerCard;
+    const isPlayerHand: boolean = props.cards[0]?.isPlayerCard;
 
     const getCardStyle = (index: number): any => {
-        const stackStyle: any = getStackStyle(index);
-        let style = stackStyle;
-
-        if (props.isTurn && props.activeIndex === index && props.cards[index])
-            style = {...style, ...getActiveStyle()};
-
-        return style;
-    }
-
-    const getStackStyle = (index: number) => {
         return {
             position: 'relative',
             top: (-80 * index) + 'px',
@@ -26,26 +16,30 @@ export const CardHand = (props: {cards: ICard[], activeIndex: number, onCardClic
         };
     }
 
-    const getActiveStyle = () => {
-        const style = {
-            left: isPlayerHand ? '-20px' : '20px',
-            boxShadow: '6px 6px gray'
-        };
-        return style;
-    }
-
     const getCardCss = (index: number) => {
-        const card = props.cards[index];
         let css = '';
-        if (props.isTurn && isPlayerHand && props.onCardClick !== undefined && card)
+        if (isSelectable())
             css = 'selectable ';
+        if (isActive(index))
+            css += 'active ';
         return css;
     }
 
     const onCardClick = (index: number) => {
-        if (props.onCardClick !== undefined && props.activeIndex !== index && props.cards[index]) {
+        if (isClickable(index))
             props.onCardClick(index);
-        }
+    }
+
+    const isSelectable = () => {
+        return props.isTurn && isPlayerHand && props.onCardClick !== undefined;
+    }
+
+    const isActive = (index: number): boolean => {
+        return props.isTurn && (props.activeIndex === index);
+    }
+
+    const isClickable = (index: number) => {
+        return props.onCardClick !== undefined && props.activeIndex !== index;
     }
 
     return (
