@@ -2,6 +2,7 @@
 
 .card .player-ownership {
     background-color: aliceblue;
+    transform: rotate(360deg);
 }
 
 .card .opponent-ownership {
@@ -17,9 +18,14 @@
 }
 
 .placeholder {
-    /* background: transparent !important; */
-    border: 1px dashed gray !important;
+    border: 1px dashed gray;
     cursor: pointer;
+    margin: 1px;
+}
+
+.hoverable:hover .placeholder {
+    border: 2px dashed blue !important;
+    margin: 0px;
 }
 
 .card {
@@ -31,12 +37,11 @@
     width: 150px;
     font-size: 20px;
     font-family: fantasy;
-    
 }
 
 .active {
     box-shadow: 6px 6px blue;
-    
+    left: -20px;
 }
 
 .selectable:hover {

@@ -16,8 +16,11 @@ export const Board = (props: {board: IBoard, onCellSelected: any}) => {
                                 return <div key={`${xIndex} ${yIndex}`} className='cell'>
                                     {
                                         cell.card ?
-                                        <Card card={cell.card} customStyle={null} /> :
-                                        <div onClick={() => props.onCellSelected([xIndex, yIndex])}><CardPlaceholder /></div>
+                                        <Card card={cell.card} /> :
+                                        <div onClick={() => props.onCellSelected([xIndex, yIndex])}
+                                            className={props.board.cells[yIndex][xIndex].card ? '' : 'hoverable'}>
+                                                <CardPlaceholder />
+                                        </div>
                                     }
                                 </div> 
                             })

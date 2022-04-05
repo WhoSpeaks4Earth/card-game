@@ -71,8 +71,10 @@ export const GameTable = () => {
     }
 
     const playOpponentCard = () => {
-        const bestPlacement: IBoardCell = cardService.determineBestPlacement(game.board, game.opponentHand.cards);
+        const bestPlacement = cardService.determineBestPlacement(game.board, game.opponentHand.cards);
         const newOpponentHand = cardService.removeCardFromSet(bestPlacement.card as ICard, game.opponentHand.cards);
+
+        console.log('opponent changing the board')
 
         setGame({
                 ...game,

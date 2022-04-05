@@ -3,7 +3,7 @@ import { CardRanks } from './CardRanks';
 import './card.css';
 
 
-export const Card = (props: {card: ICard, customStyle: any, customCss?: string}) => {
+export const Card = (props: {card: ICard, customStyle?: any, customCss?: string}) => {
 
     return (
         <div
